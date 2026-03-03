@@ -1,0 +1,4 @@
+window_index,start_row,end_row,ts,label,prediction,error,raw_response
+3,3,22,1772371068146,0,0,,"{""prediction"": 0}"
+1,1,20,1772371066612,0,0,,"{""prediction"": 0}"
+2,2,21,1772371067364,0,0,,"{""prediction"": 0}"

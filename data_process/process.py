@@ -1,7 +1,13 @@
 from pathlib import Path
+import sys
 
 import pandas as pd
-import yaml
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from config.config_parser import load_config, resolve_project_path
 
 
 class DataProcessor:
@@ -59,33 +65,6 @@ class DataProcessor:
             samples.append((window_data, label))
         return samples
 
-
-def get_project_root() -> Path:
-    current = Path(__file__).resolve()
-    for parent in current.parents:
-        if (parent / "pyproject.toml").exists():
-            return parent
-    raise FileNotFoundError("未找到项目根目录（缺少 pyproject.toml）")
-
-
-def load_config(project_root: Path) -> dict:
-    config_path = project_root / "config.yaml"
-    
-    if config_path.exists():
-        with config_path.open("r", encoding="utf-8") as file:
-            # Returns an empty dict if the file is empty
-            return yaml.safe_load(file) or {}
-            
-    raise FileNotFoundError(f"项目根目录下未找到 {config_path.name}")
-
-
-def resolve_csv_path(project_root: Path, csv_path: str) -> Path:
-    path_obj = Path(csv_path)
-    if path_obj.is_absolute():
-        return path_obj
-    return (project_root / path_obj).resolve()
-
-
 def process_one_file(processor: DataProcessor, input_file: Path, output_file: Path) -> None:
     df = processor.load_csv(str(input_file))
     df = processor.remove_idle(df)
@@ -119,8 +98,7 @@ def process_raw_folder(
     return processed_count
 
 if __name__ == "__main__":
-    project_root = get_project_root()
-    config = load_config(project_root)
+    config = load_config(__file__)
 
     data_cfg = config.get("data", {})
     label_cfg = config.get("label", {})
@@ -140,8 +118,8 @@ if __name__ == "__main__":
         spike_threshold=spike_threshold,
     )
 
-    raw_dir = resolve_csv_path(project_root, data_cfg.get("raw_dir", "data/raw"))
-    processed_dir = resolve_csv_path(project_root, data_cfg.get("processed_dir", "data/processed"))
+    raw_dir = resolve_project_path(data_cfg.get("raw_dir", "data/raw"), __file__)
+    processed_dir = resolve_project_path(data_cfg.get("processed_dir", "data/processed"), __file__)
     output_suffix = str(data_cfg.get("processed_suffix", "_processed"))
 
     total = process_raw_folder(

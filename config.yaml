@@ -1,0 +1,13 @@
+data:
+  sample_interval: 0.5
+  window_seconds: 10
+  predict_horizon_seconds: 1
+  raw_dir: data/raw
+  processed_dir: data/processed
+  processed_suffix: _processed
+
+label:
+  spike_threshold: 40000
+
+prompt:
+  hide_phase: true

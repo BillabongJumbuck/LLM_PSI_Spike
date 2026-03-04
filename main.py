@@ -74,7 +74,7 @@ if __name__ == "__main__":
     print(f"Total windows: {num_windows}")
     print("=" * 80)
 
-    output_path = resolve_project_path("data/pridict/psi_douyin_20260301_213426_pridict.csv", __file__)
+    output_path = resolve_project_path("data/predict/psi_douyin_20260301_213426_predict.csv", __file__)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     processed_window_indices = set()

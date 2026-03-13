@@ -6,7 +6,8 @@ from sklearn.metrics import (
     recall_score, 
     f1_score, 
     classification_report,
-    roc_auc_score
+    roc_auc_score,
+    average_precision_score
 )
 
 def calculate_metrics(csv_path):
@@ -65,8 +66,10 @@ def calculate_metrics(csv_path):
     
     # 在你的深度学习或机器学习项目中，ROC-AUC 也是评估分类器能力非常重要的指标
     try:
-        auc = roc_auc_score(y_true, y_pred)
-        print(f"🚀 ROC AUC Score: {auc:.4f}")
+        roc_auc = roc_auc_score(y_true, y_pred)
+        pr_auc = average_precision_score(y_true, y_pred)
+        print(f"🚀 ROC AUC Score: {roc_auc:.4f}")
+        print(f"🚀 PR AUC Score: {pr_auc:.4f}")
     except ValueError:
         print("🚀 ROC AUC Score: 无法计算 (数据中可能只包含一个类别，比如全为0)")
 

@@ -49,6 +49,8 @@ Output format (strictly follow this JSON schema):
 {{"prediction": 0 or 1}}
     """
 
+        print("Generated Prompt for LLM:")
+        print(prompt)
         return prompt.strip()
 
     def parse_prediction(self, response_text: str) -> dict:
